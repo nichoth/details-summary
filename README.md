@@ -44,7 +44,16 @@ npm i -S @substrate-system/details-summary
 
 ## Example
 
+Tag name, `details-summary` is exposed as `.TAG` on the class.
+
 ```ts
+import { DetailsSummary } from '@substrate-system/details-summary'
+import '@substrate-system/details-summary/css'
+
+document.body += `
+  <${DetailsSummary.TAG}></${DetailsSummary.TAG}>
+`
+
 ```
 
 ## API
@@ -93,6 +102,7 @@ details-summary {
 ```
 
 ## Use
+
 This calls the global function `customElements.define`. Just import, then use
 the tag in your HTML.
 
