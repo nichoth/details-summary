@@ -83,13 +83,13 @@ require('@substrate-system/details-summary')
 
 ### Attributes
 
-#### `open-by-default-on-desktop`
+#### `default-open`
 
 Boolean attribute. When present, the `<details>` element will be open by
 default on viewports wider than 990px.
 
 ```html
-<details-summary open-by-default-on-desktop>
+<details-summary default-open>
     <details>
         <summary>Open on desktop</summary>
         <div class="details-content">This starts open on desktop.</div>

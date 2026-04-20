@@ -13,7 +13,7 @@ declare global {
 export class DetailsSummary extends HTMLElement {
     // Define the attributes to observe
     // need this for `attributeChangedCallback`
-    static observedAttributes = ['open-by-default-on-desktop', 'duration']
+    static observedAttributes = ['default-open', 'duration']
 
     private _details:HTMLDetailsElement|null = null
     private _summary:HTMLElement|null = null
@@ -30,7 +30,7 @@ export class DetailsSummary extends HTMLElement {
         this._summary = this.querySelector('summary')
         this._content = this.querySelector('.details-content')
 
-        if (this.hasAttribute('open-by-default-on-desktop') && window.innerWidth > 990) {
+        if (this.hasAttribute('default-open') && window.innerWidth > 990) {
             if (this._details) this._details.open = true
         }
 
@@ -66,8 +66,8 @@ export class DetailsSummary extends HTMLElement {
         debug('an attribute changed', name, oldValue, newValue)
     }
 
-    onClick (e:MouseEvent) {
-        e.preventDefault()
+    onClick (ev:MouseEvent) {
+        ev.preventDefault()
         if (!this._details) return
 
         if (this._isClosing || !this._details.open) {
