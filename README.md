@@ -56,7 +56,7 @@ document.body += `
 ```
 
 ```html
-<details-summary animation-duration="400">
+<details-summary duration="400">
     <details>
         <summary>What is this?</summary>
         <div class="details-content">
@@ -85,7 +85,8 @@ require('@substrate-system/details-summary')
 
 #### `open-by-default-on-desktop`
 
-Boolean attribute. When present, the `<details>` element will be open by default on viewports wider than 990px.
+Boolean attribute. When present, the `<details>` element will be open by
+default on viewports wider than 990px.
 
 ```html
 <details-summary open-by-default-on-desktop>
@@ -96,12 +97,13 @@ Boolean attribute. When present, the `<details>` element will be open by default
 </details-summary>
 ```
 
-#### `animation-duration`
+#### `duration`
 
-Number (milliseconds). Controls how long the open/close animation takes. Defaults to `300`.
+Number (milliseconds). Controls how long the open/close animation takes.
+Defaults to `300`.
 
 ```html
-<details-summary animation-duration="500">
+<details-summary duration="500">
     <details>
         <summary>Slow animation</summary>
         <div class="details-content">This takes 500ms to open or close.</div>

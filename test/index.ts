@@ -16,7 +16,7 @@ test('details-summary renders and handles click', async t => {
         </details-summary>
     `
 
-    const el = await waitFor('details-summary.test')
+    const el = (await waitFor('details-summary.test'))!
     t.ok(el, 'should find the element')
 
     const details = el.querySelector('details') as HTMLDetailsElement
@@ -28,7 +28,7 @@ test('details-summary renders and handles click', async t => {
     const content = el.querySelector('.details-content')
     t.ok(content, 'should have a .details-content element inside')
 
-    t.notOk(details.open, 'details should start closed')
+    t.equal(!!(details.open), false, 'details should start closed')
 })
 
 test('open-by-default-on-desktop attribute opens on wide viewport', async t => {
@@ -43,14 +43,14 @@ test('open-by-default-on-desktop attribute opens on wide viewport', async t => {
         </details-summary>
     `
 
-    const el = await waitFor('details-summary.test2')
+    const el = (await waitFor('details-summary.test2'))!
     t.ok(el, 'should find the element')
     t.ok(el.hasAttribute('open-by-default-on-desktop'), 'should have attribute')
 })
 
-test('animation-duration attribute is accepted', async t => {
+test('duration attribute is accepted', async t => {
     document.body.innerHTML += `
-        <details-summary class="test3" animation-duration="500">
+        <details-summary class="test3" duration="500">
             <details>
                 <summary>Slow animation</summary>
                 <div class="details-content">Slow content</div>
@@ -58,7 +58,8 @@ test('animation-duration attribute is accepted', async t => {
         </details-summary>
     `
 
-    const el = await waitFor('details-summary.test3')
+    const el = (await waitFor('details-summary.test3'))!
     t.ok(el, 'should find the element')
-    t.equal(el.getAttribute('animation-duration'), '500', 'should have animation-duration attribute set to 500')
+    t.equal(el.getAttribute('duration'), '500',
+        'should have duration attribute set to 500')
 })

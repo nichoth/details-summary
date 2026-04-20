@@ -13,7 +13,7 @@ declare global {
 export class DetailsSummary extends HTMLElement {
     // Define the attributes to observe
     // need this for `attributeChangedCallback`
-    static observedAttributes = ['open-by-default-on-desktop', 'animation-duration']
+    static observedAttributes = ['open-by-default-on-desktop', 'duration']
 
     private _details:HTMLDetailsElement|null = null
     private _summary:HTMLElement|null = null
@@ -80,7 +80,7 @@ export class DetailsSummary extends HTMLElement {
     }
 
     private _animationDuration ():number {
-        const attr = this.getAttribute('animation-duration')
+        const attr = this.getAttribute('duration')
         if (attr !== null) {
             const parsed = Number(attr)
             if (!isNaN(parsed) && parsed >= 0) return parsed
