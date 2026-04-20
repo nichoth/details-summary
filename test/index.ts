@@ -47,3 +47,18 @@ test('open-by-default-on-desktop attribute opens on wide viewport', async t => {
     t.ok(el, 'should find the element')
     t.ok(el.hasAttribute('open-by-default-on-desktop'), 'should have attribute')
 })
+
+test('animation-duration attribute is accepted', async t => {
+    document.body.innerHTML += `
+        <details-summary class="test3" animation-duration="500">
+            <details>
+                <summary>Slow animation</summary>
+                <div class="details-content">Slow content</div>
+            </details>
+        </details-summary>
+    `
+
+    const el = await waitFor('details-summary.test3')
+    t.ok(el, 'should find the element')
+    t.equal(el.getAttribute('animation-duration'), '500', 'should have animation-duration attribute set to 500')
+})

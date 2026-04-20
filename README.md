@@ -53,7 +53,17 @@ import '@substrate-system/details-summary/css'
 document.body += `
   <${DetailsSummary.TAG}></${DetailsSummary.TAG}>
 `
+```
 
+```html
+<details-summary animation-duration="400">
+    <details>
+        <summary>What is this?</summary>
+        <div class="details-content">
+            This is a details/summary web component with smooth animation.
+        </div>
+    </details>
+</details-summary>
 ```
 
 ## API
@@ -73,12 +83,42 @@ require('@substrate-system/details-summary')
 
 ### Attributes
 
-`<all attributes here>`
+#### `open-by-default-on-desktop`
+
+Boolean attribute. When present, the `<details>` element will be open by default on viewports wider than 990px.
+
+```html
+<details-summary open-by-default-on-desktop>
+    <details>
+        <summary>Open on desktop</summary>
+        <div class="details-content">This starts open on desktop.</div>
+    </details>
+</details-summary>
+```
+
+#### `animation-duration`
+
+Number (milliseconds). Controls how long the open/close animation takes. Defaults to `300`.
+
+```html
+<details-summary animation-duration="500">
+    <details>
+        <summary>Slow animation</summary>
+        <div class="details-content">This takes 500ms to open or close.</div>
+    </details>
+</details-summary>
+```
 
 ### Events
 
-`<all events here>`
+This element wraps the native `<details>` element. The native [`toggle` event](https://developer.mozilla.org/en-US/docs/Web/API/HTMLDetailsElement/toggle_event) fires on the inner `<details>` element whenever it opens or closes.
 
+```js
+const el = document.querySelector('details-summary')
+el.querySelector('details').addEventListener('toggle', ev => {
+    console.log('open?', ev.target.open)
+})
+```
 
 ## CSS
 
@@ -93,11 +133,22 @@ Or minified:
 import '@substrate-system/details-summary/min/css'
 ```
 
-### Customize CSS via some variables
+### Customize CSS via CSS variables
+
+| Variable | Default | Description |
+|---|---|---|
+| `--details-summary-border-color` | `0, 0, 0` | RGB value for the bottom border color |
+| `--details-summary-padding` | `1rem` | Padding for the summary and content |
+| `--details-summary-font-weight` | `600` | Font weight of the summary text |
+| `--details-summary-font-size` | `16px` | Font size of the summary text |
+| `--details-summary-transition-speed` | `0.3s` | Speed of the icon rotation and content fade transitions |
+| `--details-summary-content-color` | `#444` | Text color of the details content |
 
 ```css
 details-summary {
-    --example: pink;
+    --details-summary-border-color: 100, 100, 200;
+    --details-summary-padding: 0.75rem;
+    --details-summary-transition-speed: 0.5s;
 }
 ```
 
