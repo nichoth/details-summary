@@ -6,7 +6,7 @@ const debug = Debug('details-summary')
 // for document.querySelector
 declare global {
     interface HTMLElementTagNameMap {
-        'details-summary': DetailsSummary
+        'details-summary':DetailsSummary
     }
 }
 
