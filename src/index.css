@@ -1,10 +1,10 @@
 /**
  * Don't show until JavaScript is instantiated
  */
-{{component-name}}:not(:defined) {
+details-summary:not(:defined) {
 	display: none;
 }
 
-{{component-name}} {
+details-summary {
     background-color: red;
 }
