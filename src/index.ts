@@ -82,6 +82,7 @@ export class DetailsSummary extends HTMLElement {
     private _shrink () {
         if (!this._details || !this._summary) return
         this._isClosing = true
+        this._details.classList.add('is-closing')
         const startHeight = `${this._details.offsetHeight}px`
         const endHeight = `${this._summary.offsetHeight}px`
 
@@ -123,6 +124,7 @@ export class DetailsSummary extends HTMLElement {
     private _onAnimationFinish (open:boolean) {
         if (!this._details) return
         this._details.open = open
+        this._details.classList.remove('is-closing')
         this._animation = null
         this._isClosing = false
         this._isExpanding = false
