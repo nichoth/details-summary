@@ -2,50 +2,43 @@ import { define } from '@substrate-system/web-component/util'
 import Debug from '@substrate-system/debug'
 const debug = Debug('details-summary')
 
-// for docuement.querySelector
+// for document.querySelector
 declare global {
     interface HTMLElementTagNameMap {
-        'details-summary': Example
+        'details-summary': DetailsSummary
     }
 }
 
-export class Example extends HTMLElement {
+export class DetailsSummary extends HTMLElement {
     // Define the attributes to observe
     // need this for `attributeChangedCallback`
-    static observedAttributes = ['example']
+    static observedAttributes = ['open-by-default-on-desktop']
 
-    example:string|null
+    private _details:HTMLDetailsElement|null = null
+    private _summary:HTMLElement|null = null
+    private _content:HTMLElement|null = null
+    private _animation:Animation|null = null
+    private _isClosing:boolean = false
+    private _isExpanding:boolean = false
 
-    constructor () {
-        super()
-        const example = this.getAttribute('example')
-        this.example = example
+    connectedCallback () {
+        debug('connected')
 
-        this.innerHTML = `<div>
-            <p>example</p>
-            <ul>
-                ${Array.from(this.children).filter(Boolean).map(node => {
-                    return `<li>${node.outerHTML}</li>`
-                }).join('')}
-            </ul>
-        </div>`
+        this._details = this.querySelector('details')
+        this._summary = this.querySelector('summary')
+        this._content = this.querySelector('.details-content')
+
+        if (this.hasAttribute('open-by-default-on-desktop') && window.innerWidth > 990) {
+            if (this._details) this._details.open = true
+        }
+
+        if (this._summary) {
+            this._summary.addEventListener('click', (e) => this.onClick(e))
+        }
     }
 
-    /**
-     * Handle 'example' attribute changes
-     * @see {@link https://gomakethings.com/how-to-detect-when-attributes-change-on-a-web-component/#organizing-your-code Go Make Things article}
-     *
-     * @param  {string} oldValue The old attribute value
-     * @param  {string} newValue The new attribute value
-     */
-    handleChange_example (oldValue:string, newValue:string) {
-        debug('handling example change', oldValue, newValue)
-
-        if (newValue === null) {
-            // [example] was removed
-        } else {
-            // set [example] attribute
-        }
+    disconnectedCallback () {
+        debug('disconnected')
     }
 
     /**
@@ -56,42 +49,69 @@ export class Example extends HTMLElement {
      * @param  {string} newValue The new attribute value
      */
     attributeChangedCallback (name:string, oldValue:string, newValue:string) {
-        debug('an attribute changed', name)
-        const handler = this[`handleChange_${name}`];
-        (handler && handler(oldValue, newValue))
-        this.render()
+        debug('an attribute changed', name, oldValue, newValue)
     }
 
-    disconnectedCallback () {
-        debug('disconnected')
+    onClick (e:MouseEvent) {
+        e.preventDefault()
+        if (!this._details) return
+
+        if (this._isClosing || !this._details.open) {
+            this._open()
+        } else if (this._isExpanding || this._details.open) {
+            this._shrink()
+        }
     }
 
-    connectedCallback () {
-        debug('connected')
+    private _shrink () {
+        if (!this._details || !this._summary) return
+        this._isClosing = true
+        const startHeight = `${this._details.offsetHeight}px`
+        const endHeight = `${this._summary.offsetHeight}px`
 
-        const observer = new MutationObserver(function (mutations) {
-            mutations.forEach((mutation) => {
-                if (mutation.addedNodes.length) {
-                    debug('Node added: ', mutation.addedNodes)
-                }
-            })
-        })
+        if (this._animation) this._animation.cancel()
 
-        observer.observe(this, { childList: true })
+        this._animation = this._details.animate(
+            { height: [startHeight, endHeight] },
+            { duration: 300, easing: 'ease-out' }
+        )
 
-        this.render()
+        this._animation.onfinish = () => this._onAnimationFinish(false)
+        this._animation.oncancel = () => { this._isClosing = false }
     }
 
-    render () {
-        this.innerHTML = `<div>
-            <p>example</p>
-            <ul>
-                ${Array.from(this.children).filter(Boolean).map(node => {
-                    return `<li>${node.outerHTML}</li>`
-                }).join('')}
-            </ul>
-        </div>`
+    private _open () {
+        if (!this._details) return
+        this._details.style.height = `${this._details.offsetHeight}px`
+        this._details.open = true
+        window.requestAnimationFrame(() => this._expand())
+    }
+
+    private _expand () {
+        if (!this._details || !this._summary || !this._content) return
+        this._isExpanding = true
+        const startHeight = `${this._details.offsetHeight}px`
+        const endHeight = `${this._summary.offsetHeight + this._content.offsetHeight}px`
+
+        if (this._animation) this._animation.cancel()
+
+        this._animation = this._details.animate(
+            { height: [startHeight, endHeight] },
+            { duration: 300, easing: 'ease-out' }
+        )
+
+        this._animation.onfinish = () => this._onAnimationFinish(true)
+        this._animation.oncancel = () => { this._isExpanding = false }
+    }
+
+    private _onAnimationFinish (open:boolean) {
+        if (!this._details) return
+        this._details.open = open
+        this._animation = null
+        this._isClosing = false
+        this._isExpanding = false
+        this._details.style.height = ''
     }
 }
 
-define('details-summary', Example)
+define('details-summary', DetailsSummary)

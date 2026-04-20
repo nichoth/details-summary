@@ -6,7 +6,3 @@ if (import.meta.env.DEV || import.meta.env.MODE !== 'production') {
 } else {
     localStorage.removeItem('DEBUG')
 }
-
-document.body.innerHTML += `
-    <details-summary></details-summary>
-`
