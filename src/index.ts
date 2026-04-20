@@ -1,4 +1,4 @@
-import { define } from '@substrate-system/web-component/util'
+import { WebComponent } from '@substrate-system/web-component'
 import Debug from '@substrate-system/debug'
 import '@substrate-system/a11y/visually-hidden'
 const debug = Debug('details-summary')
@@ -10,10 +10,9 @@ declare global {
     }
 }
 
-export class DetailsSummary extends HTMLElement {
-    // Define the attributes to observe
-    // need this for `attributeChangedCallback`
-    static observedAttributes = ['default-open', 'duration']
+export class DetailsSummary extends WebComponent.create('details-summary') {
+    static reflectedBooleanAttributes = ['default-open']
+    static reflectedStringAttributes = ['duration']
 
     private _details:HTMLDetailsElement|null = null
     private _summary:HTMLElement|null = null
@@ -23,7 +22,7 @@ export class DetailsSummary extends HTMLElement {
     private _isClosing:boolean = false
     private _isExpanding:boolean = false
 
-    connectedCallback () {
+    render () {
         debug('connected')
 
         this._details = this.querySelector('details')
@@ -62,8 +61,9 @@ export class DetailsSummary extends HTMLElement {
      * @param  {string} oldValue The old attribute value
      * @param  {string} newValue The new attribute value
      */
-    attributeChangedCallback (name:string, oldValue:string, newValue:string) {
+    async attributeChangedCallback (name:string, oldValue:string, newValue:string) {
         debug('an attribute changed', name, oldValue, newValue)
+        await super.attributeChangedCallback(name, oldValue, newValue)
     }
 
     onClick (ev:MouseEvent) {
@@ -141,4 +141,4 @@ export class DetailsSummary extends HTMLElement {
     }
 }
 
-define('details-summary', DetailsSummary)
+DetailsSummary.define()
