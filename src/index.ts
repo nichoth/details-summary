@@ -138,6 +138,21 @@ export class DetailsSummary extends HTMLElement {
         this._isClosing = false
         this._isExpanding = false
         this._details.style.height = ''
+        this._emit(open ? 'open' : 'close')
+    }
+
+    private _emit (type:'open'|'close') {
+        const detail = { details: this._details }
+        this.dispatchEvent(new CustomEvent(type, {
+            bubbles: true,
+            composed: true,
+            detail
+        }))
+        this.dispatchEvent(new CustomEvent(`details-summary:${type}`, {
+            bubbles: true,
+            composed: true,
+            detail
+        }))
     }
 }
 

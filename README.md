@@ -111,12 +111,50 @@ Number (milliseconds). Controls how long the open/close animation takes. Default
 
 ### Events
 
-This element wraps the native `<details>` element. The native [`toggle` event](https://developer.mozilla.org/en-US/docs/Web/API/HTMLDetailsElement/toggle_event) fires on the inner `<details>` element whenever it opens or closes.
+This element emits four events whenever it opens or closes.
+
+#### Non-namespaced events
+
+| Event | Fired when |
+|---|---|
+| `open` | The element finishes opening |
+| `close` | The element finishes closing |
+
+#### Namespaced events
+
+| Event | Fired when |
+|---|---|
+| `details-summary:open` | The element finishes opening |
+| `details-summary:close` | The element finishes closing |
+
+All events bubble and are composed. Each event carries a `detail.details` property that references the inner `<details>` element that triggered the event.
 
 ```js
 const el = document.querySelector('details-summary')
-el.querySelector('details').addEventListener('toggle', ev => {
-    console.log('open?', ev.target.open)
+
+// non-namespaced
+el.addEventListener('open', ev => {
+    console.log('opened', ev.detail.details)
+})
+el.addEventListener('close', ev => {
+    console.log('closed', ev.detail.details)
+})
+
+// namespaced
+el.addEventListener('details-summary:open', ev => {
+    console.log('opened', ev.detail.details)
+})
+el.addEventListener('details-summary:close', ev => {
+    console.log('closed', ev.detail.details)
+})
+```
+
+Events bubble, so you can also listen on a parent element. Use `event.detail.details` to get the `<details>` element that triggered the event:
+
+```js
+document.addEventListener('details-summary:open', ev => {
+    const details = ev.detail.details  // the <details> element that opened
+    console.log('a details-summary opened', details)
 })
 ```
 
