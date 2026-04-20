@@ -73,7 +73,7 @@ details-summary details {
             transform var(--details-summary-transition-speed, 0.3s) ease;
     }
 
-    &[open] {
+    &[open]:not(.is-closing) {
         & .details-summary-icon {
             transform: rotate(45deg);
         }
