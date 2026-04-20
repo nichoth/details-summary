@@ -1,13 +1,13 @@
-/**
- * Don't show until JavaScript is instantiated
- */
-details-summary:not(:defined) {
-    display: none;
-}
-
 details-summary {
     display: block;
-    border-bottom: 1px solid rgba(var(--details-summary-border-color, 0, 0, 0), 0.1);
+    border-bottom: 1px solid rgb(var(--details-summary-border-color, 0, 0, 0), 0.1);
+
+    /**
+    * Don't show until JavaScript is instantiated
+    */
+    &:not(:defined) {
+        display: none;
+    }
 }
 
 details-summary details {
