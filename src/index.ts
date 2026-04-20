@@ -13,7 +13,7 @@ declare global {
 export class DetailsSummary extends HTMLElement {
     // Define the attributes to observe
     // need this for `attributeChangedCallback`
-    static observedAttributes = ['open-by-default-on-desktop']
+    static observedAttributes = ['open-by-default-on-desktop', 'animation-duration']
 
     private _details:HTMLDetailsElement|null = null
     private _summary:HTMLElement|null = null
@@ -79,6 +79,15 @@ export class DetailsSummary extends HTMLElement {
         }
     }
 
+    private _animationDuration ():number {
+        const attr = this.getAttribute('animation-duration')
+        if (attr !== null) {
+            const parsed = Number(attr)
+            if (!isNaN(parsed) && parsed >= 0) return parsed
+        }
+        return 300
+    }
+
     private _shrink () {
         if (!this._details || !this._summary) return
         this._isClosing = true
@@ -90,7 +99,7 @@ export class DetailsSummary extends HTMLElement {
 
         this._animation = this._details.animate(
             { height: [startHeight, endHeight] },
-            { duration: 300, easing: 'ease-out' }
+            { duration: this._animationDuration(), easing: 'ease-out' }
         )
 
         this._animation.onfinish = () => this._onAnimationFinish(false)
@@ -114,7 +123,7 @@ export class DetailsSummary extends HTMLElement {
 
         this._animation = this._details.animate(
             { height: [startHeight, endHeight] },
-            { duration: 300, easing: 'ease-out' }
+            { duration: this._animationDuration(), easing: 'ease-out' }
         )
 
         this._animation.onfinish = () => this._onAnimationFinish(true)
