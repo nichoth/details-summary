@@ -2,9 +2,69 @@
  * Don't show until JavaScript is instantiated
  */
 details-summary:not(:defined) {
-	display: none;
+    display: none;
 }
 
 details-summary {
-    background-color: red;
+    display: block;
+    border-bottom: 1px solid rgba(var(--details-summary-border-color, 0, 0, 0), 0.1);
+}
+
+details-summary details {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+details-summary summary {
+    list-style: none;
+    cursor: pointer;
+    padding: var(--details-summary-padding, 1rem) 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: var(--details-summary-font-weight, 600);
+    font-size: var(--details-summary-font-size, 16px);
+    user-select: none;
+}
+
+details-summary summary::-webkit-details-marker {
+    display: none;
+}
+
+/* Custom caret icon */
+details-summary summary::after {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid currentcolor;
+    border-bottom: 2px solid currentcolor;
+    transform: rotate(45deg);
+    transition: transform var(--details-summary-transition-speed, 0.3s) ease;
+    margin-right: 5px;
+    flex-shrink: 0;
+}
+
+details-summary details[open] summary::after {
+    transform: rotate(-135deg);
+}
+
+details-summary .details-content {
+    padding-bottom: var(--details-summary-padding, 1rem);
+    line-height: 1.5;
+    color: var(--details-summary-content-color, #444);
+    opacity: 0;
+    transform: translateY(-10px);
+    transition:
+        opacity var(--details-summary-transition-speed, 0.3s) ease,
+        transform var(--details-summary-transition-speed, 0.3s) ease;
+}
+
+details-summary details[open] .details-content {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+details-summary summary:hover {
+    color: var(--details-summary-hover-color, #ff8200);
 }
