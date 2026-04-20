@@ -1,5 +1,6 @@
 import { define } from '@substrate-system/web-component/util'
 import Debug from '@substrate-system/debug'
+import '@substrate-system/a11y/visually-hidden'
 const debug = Debug('details-summary')
 
 // for document.querySelector
@@ -17,6 +18,7 @@ export class DetailsSummary extends HTMLElement {
     private _details:HTMLDetailsElement|null = null
     private _summary:HTMLElement|null = null
     private _content:HTMLElement|null = null
+    private _toggleLabel:HTMLElement|null = null
     private _animation:Animation|null = null
     private _isClosing:boolean = false
     private _isExpanding:boolean = false
@@ -33,6 +35,18 @@ export class DetailsSummary extends HTMLElement {
         }
 
         if (this._summary) {
+            const icon = document.createElement('span')
+            icon.setAttribute('aria-hidden', 'true')
+            icon.className = 'details-summary-icon'
+
+            const label = document.createElement('span')
+            label.className = 'visually-hidden'
+            label.textContent = this._details?.open ? 'collapse' : 'expand'
+            this._toggleLabel = label
+
+            this._summary.appendChild(icon)
+            this._summary.appendChild(label)
+
             this._summary.addEventListener('click', (e) => this.onClick(e))
         }
     }
@@ -57,8 +71,10 @@ export class DetailsSummary extends HTMLElement {
         if (!this._details) return
 
         if (this._isClosing || !this._details.open) {
+            if (this._toggleLabel) this._toggleLabel.textContent = 'collapse'
             this._open()
         } else if (this._isExpanding || this._details.open) {
+            if (this._toggleLabel) this._toggleLabel.textContent = 'expand'
             this._shrink()
         }
     }
