@@ -1,5 +1,5 @@
 # `details-summary`
-![tests](https://github.com/nichoth/details-summary/actions/workflows/nodejs.yml/badge.svg)
+[![tests](https://img.shields.io/github/actions/workflow/status/nichoth/details-summary/nodejs.yml?style=flat-square)](https://github.com/nichoth/details-summary/actions/workflows/nodejs.yml)
 [![types](https://img.shields.io/npm/types/@substrate-system/details-summary?style=flat-square)](README.md)
 [![module](https://img.shields.io/badge/module-ESM%2FCJS-blue?style=flat-square)](README.md)
 [![install size](https://flat.badgen.net/packagephobia/install/@nichoth/details-summary?cache-control=no-cache)](https://packagephobia.com/result?p=@nichoth/details-summary)
