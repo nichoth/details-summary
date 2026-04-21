@@ -1,9 +1,29 @@
 {
   "name": "@substrate-system/details-summary",
-  "private": true,
-  "type": "module",
   "version": "0.0.0",
+  "description": "Details/summary HTML elements with style",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./css": "./dist/index.css",
+    "./min/css": "./dist/index.min.css",
+    "./min/*": {
+      "import": "./dist/*.min.js",
+      "require": "./dist/*.min.cjs"
+    },
+    "./*": {
+      "import": "./dist/*.js",
+      "require": "./dist/*.cjs"
+    }
+  },
   "main": "dist/index.js",
+  "directories": {
+    "example": "example",
+    "test": "test"
+  },
   "files": [
     "./dist/*"
   ],
@@ -25,21 +45,9 @@
     "postversion": "git push --follow-tags && npm publish",
     "prepublishOnly": "npm run build"
   },
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
-    },
-    "./css": "./dist/index.css",
-    "./min/css": "./dist/index.min.css",
-    "./min/*": {
-      "import": "./dist/*.min.js",
-      "require": "./dist/*.min.cjs"
-    },
-    "./*": {
-      "import": "./dist/*.js",
-      "require": "./dist/*.cjs"
-    }
+  "dependencies": {
+    "@substrate-system/a11y": "^0.0.17",
+    "@substrate-system/web-component": "^0.0.49"
   },
   "devDependencies": {
     "@substrate-system/debug": "^0.9.60",
@@ -63,10 +71,20 @@
     "typescript": "^6.0.2",
     "vite": "^8.0.5"
   },
-  "author": "nichoth <nichoth@nichoth.com> (https://nichoth.com)",
+  "keywords": [
+    "details",
+    "summary",
+    "web",
+    "component"
+  ],
+  "homepage": "https://github.com/nichoth/details-summary#readme",
+  "bugs": {
+    "url": "https://github.com/nichoth/details-summary/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nichoth/details-summary.git"
+  },
   "license": "SEE LICENSE IN LICENSE",
-  "dependencies": {
-    "@substrate-system/a11y": "^0.0.17",
-    "@substrate-system/web-component": "^0.0.49"
-  }
+  "author": "nichoth <nichoth@nichoth.com> (https://nichoth.com)"
 }

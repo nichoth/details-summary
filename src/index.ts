@@ -143,16 +143,14 @@ export class DetailsSummary extends WebComponent.create('details-summary') {
 
     private _emit (type:'open'|'close') {
         const detail = { details: this._details }
-        this.dispatchEvent(new CustomEvent(type, {
+        this.dispatch(type, {
             bubbles: true,
-            composed: true,
             detail
-        }))
-        this.dispatchEvent(new CustomEvent(`details-summary:${type}`, {
+        })
+        this.emit(type, {
             bubbles: true,
-            composed: true,
             detail
-        }))
+        })
     }
 }
 
