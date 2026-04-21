@@ -1,5 +1,12 @@
 {
     "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "rootDir": "."
+    },
+    "include": [
+        "src/**/*",
+        "lib.es5.d.ts"
+    ],
     "exclude": [
         "example",
         "test"

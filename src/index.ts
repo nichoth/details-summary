@@ -1,5 +1,5 @@
 import { WebComponent } from '@substrate-system/web-component'
-import '@substrate-system/a11y/visually-hidden'
+import '@substrate-system/a11y'
 
 // for document.querySelector
 declare global {

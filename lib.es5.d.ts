@@ -18,4 +18,4 @@ interface Array<T> {
     : Exclude<S, Falsy>[];
 }
 
-declare module '@substrate-system/a11y/visually-hidden' {}
+declare module '@substrate-system/a11y' {}
