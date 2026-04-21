@@ -1,6 +1,6 @@
 {
   "name": "@substrate-system/details-summary",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Details/summary HTML elements with style",
   "type": "module",
   "exports": {

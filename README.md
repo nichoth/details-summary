@@ -26,7 +26,7 @@ Details + summary HTML elements with better style.
   * [Events](#events)
 - [CSS](#css)
   * [Import CSS](#import-css)
-  * [Customize CSS via some variables](#customize-css-via-some-variables)
+  * [Customize CSS via CSS variables](#customize-css-via-css-variables)
 - [Use](#use)
   * [JS](#js)
   * [HTML](#html)
