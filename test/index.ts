@@ -151,3 +151,8 @@ test('events bubble to a parent element; detail.details is the triggering <detai
     t.ok(detailsEl, 'can retrieve the triggering <details> element via event.detail.details')
     t.ok(detailsEl.open, 'the retrieved <details> element is open after opening')
 })
+
+test('all done', () => {
+    // @ts-expect-error tests
+    window.testsFinished = true
+})

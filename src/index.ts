@@ -1,7 +1,5 @@
 import { WebComponent } from '@substrate-system/web-component'
-import Debug from '@substrate-system/debug'
 import '@substrate-system/a11y/visually-hidden'
-const debug = Debug('details-summary')
 
 // for document.querySelector
 declare global {
@@ -23,8 +21,6 @@ export class DetailsSummary extends WebComponent.create('details-summary') {
     private _isExpanding:boolean = false
 
     render () {
-        debug('connected')
-
         this._details = this.querySelector('details')
         this._summary = this.querySelector('summary')
         this._content = this.querySelector('.details-content')
@@ -50,10 +46,6 @@ export class DetailsSummary extends WebComponent.create('details-summary') {
         }
     }
 
-    disconnectedCallback () {
-        debug('disconnected')
-    }
-
     /**
      * Runs when the value of an attribute is changed
      *
@@ -62,7 +54,6 @@ export class DetailsSummary extends WebComponent.create('details-summary') {
      * @param  {string} newValue The new attribute value
      */
     async attributeChangedCallback (name:string, oldValue:string, newValue:string) {
-        debug('an attribute changed', name, oldValue, newValue)
         await super.attributeChangedCallback(name, oldValue, newValue)
     }
 
@@ -143,14 +134,8 @@ export class DetailsSummary extends WebComponent.create('details-summary') {
 
     private _emit (type:'open'|'close') {
         const detail = { details: this._details }
-        this.dispatch(type, {
-            bubbles: true,
-            detail
-        })
-        this.emit(type, {
-            bubbles: true,
-            detail
-        })
+        this.dispatch(type, { bubbles: true, detail })
+        this.emit(type, { bubbles: true, detail })
     }
 }
 
