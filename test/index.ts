@@ -3,7 +3,8 @@ import { waitFor } from '@substrate-system/dom'
 import '../src/index.js'
 
 test('details-summary is defined', async t => {
-    t.ok(customElements.get('details-summary'), 'should be defined as a custom element')
+    t.ok(customElements.get('details-summary'),
+        'should be defined as a custom element')
 })
 
 test('details-summary renders and handles click', async t => {
