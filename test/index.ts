@@ -1,5 +1,5 @@
 import { test } from '@substrate-system/tapzero'
-import { waitFor } from '@substrate-system/dom'
+import { waitFor, sleep } from '@substrate-system/dom'
 import '../src/index.js'
 
 test('details-summary is defined', async t => {
@@ -150,6 +150,101 @@ test('events bubble to a parent element; detail.details is the triggering <detai
     const detailsEl = openEvent.detail.details as HTMLDetailsElement
     t.ok(detailsEl, 'can retrieve the triggering <details> element via event.detail.details')
     t.ok(detailsEl.open, 'the retrieved <details> element is open after opening')
+})
+
+test('disabled prevents a closed panel from expanding', async t => {
+    document.body.innerHTML += `
+        <details-summary class="test-disabled" disabled duration="0">
+            <details>
+                <summary>Disabled</summary>
+                <div class="details-content">Disabled content</div>
+            </details>
+        </details-summary>
+    `
+
+    const el = (await waitFor('details-summary.test-disabled'))!
+    const details = el.querySelector('details') as HTMLDetailsElement
+    const summary = el.querySelector('summary') as HTMLElement
+
+    summary.click()
+
+    t.equal(details.open, false,
+        'details should stay closed when disabled')
+})
+
+test('disabled prevents an open panel from collapsing', async t => {
+    document.body.innerHTML += `
+        <details-summary class="test-disabled-open" disabled duration="0">
+            <details open>
+                <summary>Disabled open</summary>
+                <div class="details-content">Open content</div>
+            </details>
+        </details-summary>
+    `
+
+    const el = (await waitFor('details-summary.test-disabled-open'))!
+    const details = el.querySelector('details') as HTMLDetailsElement
+    const summary = el.querySelector('summary') as HTMLElement
+
+    let closed = false
+    el.addEventListener('close', () => { closed = true }, { once: true })
+
+    summary.click()
+    await sleep(60)
+
+    t.equal(details.open, true,
+        'details should stay open when disabled')
+    t.equal(closed, false,
+        'should not emit a close event when disabled')
+})
+
+test('removing the disabled attribute restores toggling', async t => {
+    document.body.innerHTML += `
+        <details-summary class="test-reenable" disabled duration="0">
+            <details>
+                <summary>Re-enable</summary>
+                <div class="details-content">Re-enable content</div>
+            </details>
+        </details-summary>
+    `
+
+    const el = (await waitFor('details-summary.test-reenable'))!
+    const details = el.querySelector('details') as HTMLDetailsElement
+    const summary = el.querySelector('summary') as HTMLElement
+
+    el.removeAttribute('disabled')
+    summary.click()
+
+    t.equal(details.open, true,
+        'details should open once disabled is removed')
+})
+
+test('disabled marks the summary as inert for assistive tech', async t => {
+    document.body.innerHTML += `
+        <details-summary class="test-a11y" disabled duration="0">
+            <details>
+                <summary>A11y</summary>
+                <div class="details-content">A11y content</div>
+            </details>
+        </details-summary>
+    `
+
+    const el = (await waitFor('details-summary.test-a11y'))!
+    const summary = el.querySelector('summary') as HTMLElement
+
+    t.equal(summary.getAttribute('aria-disabled'), 'true',
+        'summary should be aria-disabled while disabled')
+    t.equal(summary.getAttribute('tabindex'), '-1',
+        'summary should be out of the tab order while disabled')
+
+    el.removeAttribute('disabled')
+    await waitFor(null, { visible: false },
+        () => !summary.hasAttribute('aria-disabled'))
+
+    t.equal(summary.hasAttribute('aria-disabled'), false,
+        'aria-disabled should be cleared once enabled')
+    t.equal(summary.hasAttribute('tabindex'), false,
+        'summary should return to the tab order once enabled')
 })
 
 test('all done', () => {

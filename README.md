@@ -111,6 +111,25 @@ Defaults to `300`.
 </details-summary>
 ```
 
+#### `disabled`
+
+Boolean attribute. When present, the panel is locked &mdash; it can neither be
+expanded nor collapsed. The summary is removed from the tab order and marked
+`aria-disabled`, and the whole component is dimmed. The attribute can be
+toggled at runtime.
+
+```html
+<details-summary disabled>
+    <details>
+        <summary>Unavailable</summary>
+        <div class="details-content">You cannot open or close this.</div>
+    </details>
+</details-summary>
+```
+
+The dimming opacity can be customized with the
+`--details-summary-disabled-opacity` CSS variable (defaults to `0.4`).
+
 ### Events
 
 This element emits four events whenever it opens or closes.
@@ -183,6 +202,7 @@ import '@substrate-system/details-summary/min/css'
 | `--details-summary-font-size` | `16px` | Font size of the summary text |
 | `--details-summary-transition-speed` | `0.3s` | Speed of the icon rotation and content fade transitions |
 | `--details-summary-content-color` | `#444` | Text color of the details content |
+| `--details-summary-disabled-opacity` | `0.4` | Opacity of the component when `disabled` |
 
 ```css
 details-summary {

@@ -83,4 +83,12 @@ details-summary {
             }
         }
     }
+
+    &[disabled] {
+        opacity: var(--details-summary-disabled-opacity, 0.4);
+
+        & summary {
+            cursor: not-allowed;
+        }
+    }
 }

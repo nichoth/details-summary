@@ -9,7 +9,7 @@ declare global {
 }
 
 export class DetailsSummary extends WebComponent.create('details-summary') {
-    static reflectedBooleanAttributes = ['default-open']
+    static reflectedBooleanAttributes = ['default-open', 'disabled']
     static reflectedStringAttributes = ['duration']
 
     private _details:HTMLDetailsElement|null = null
@@ -44,6 +44,30 @@ export class DetailsSummary extends WebComponent.create('details-summary') {
 
             this._summary.addEventListener('click', (e) => this.onClick(e))
         }
+
+        this._applyDisabledState()
+    }
+
+    /**
+     * Reflect the `disabled` attribute onto the summary so the control is
+     * inert: removed from the tab order and announced as disabled.
+     */
+    private _applyDisabledState () {
+        if (!this._summary) return
+        if (this.hasAttribute('disabled')) {
+            this._summary.setAttribute('aria-disabled', 'true')
+            this._summary.setAttribute('tabindex', '-1')
+        } else {
+            this._summary.removeAttribute('aria-disabled')
+            this._summary.removeAttribute('tabindex')
+        }
+    }
+
+    /**
+     * React to `disabled` being toggled at runtime.
+     */
+    handleChange_disabled (_oldValue:string|null, _newValue:string|null) {
+        this._applyDisabledState()
     }
 
     /**
@@ -59,6 +83,7 @@ export class DetailsSummary extends WebComponent.create('details-summary') {
 
     onClick (ev:MouseEvent) {
         ev.preventDefault()
+        if (this.hasAttribute('disabled')) return
         if (!this._details) return
 
         if (this._isClosing || !this._details.open) {
