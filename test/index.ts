@@ -247,6 +247,75 @@ test('disabled marks the summary as inert for assistive tech', async t => {
         'summary should return to the tab order once enabled')
 })
 
+test('adds "open" class to the host when expanded', async t => {
+    document.body.innerHTML += `
+        <details-summary class="test-open-class" duration="0">
+            <details>
+                <summary>Open class</summary>
+                <div class="details-content">content</div>
+            </details>
+        </details-summary>
+    `
+
+    const el = (await waitFor('details-summary.test-open-class'))!
+    const summary = el.querySelector('summary') as HTMLElement
+
+    t.equal(el.classList.contains('open'), false,
+        'should not have the open class while closed')
+
+    await new Promise(resolve => {
+        el.addEventListener('open', resolve, { once: true })
+        summary.click()
+    })
+
+    t.equal(el.classList.contains('open'), true,
+        'should have the open class after expanding')
+})
+
+test('removes the "open" class from the host when collapsed', async t => {
+    document.body.innerHTML += `
+        <details-summary class="test-close-class" duration="0">
+            <details>
+                <summary>Close class</summary>
+                <div class="details-content">content</div>
+            </details>
+        </details-summary>
+    `
+
+    const el = (await waitFor('details-summary.test-close-class'))!
+    const summary = el.querySelector('summary') as HTMLElement
+
+    await new Promise(resolve => {
+        el.addEventListener('open', resolve, { once: true })
+        summary.click()
+    })
+    t.equal(el.classList.contains('open'), true,
+        'open class should be present after expanding')
+
+    await new Promise(resolve => {
+        el.addEventListener('close', resolve, { once: true })
+        summary.click()
+    })
+    t.equal(el.classList.contains('open'), false,
+        'should remove the open class after collapsing')
+})
+
+test('host has the "open" class when it renders already open', async t => {
+    document.body.innerHTML += `
+        <details-summary class="test-initial-open" duration="0">
+            <details open>
+                <summary>Initially open</summary>
+                <div class="details-content">content</div>
+            </details>
+        </details-summary>
+    `
+
+    const el = (await waitFor('details-summary.test-initial-open'))!
+
+    t.equal(el.classList.contains('open'), true,
+        'should have the open class when rendered open')
+})
+
 test('all done', () => {
     // @ts-expect-error tests
     window.testsFinished = true

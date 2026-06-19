@@ -29,6 +29,8 @@ export class DetailsSummary extends WebComponent.create('details-summary') {
             if (this._details) this._details.open = true
         }
 
+        this.classList.toggle('open', !!this._details?.open)
+
         if (this._summary) {
             const icon = document.createElement('span')
             icon.setAttribute('aria-hidden', 'true')
@@ -149,6 +151,7 @@ export class DetailsSummary extends WebComponent.create('details-summary') {
     private _onAnimationFinish (open:boolean) {
         if (!this._details) return
         this._details.open = open
+        this.classList.toggle('open', open)
         this._details.classList.remove('is-closing')
         this._animation = null
         this._isClosing = false
