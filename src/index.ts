@@ -1,5 +1,4 @@
 import { WebComponent } from '@substrate-system/web-component'
-import '@substrate-system/a11y'
 
 // for document.querySelector
 declare global {
@@ -15,7 +14,6 @@ export class DetailsSummary extends WebComponent.create('details-summary') {
     private _details:HTMLDetailsElement|null = null
     private _summary:HTMLElement|null = null
     private _content:HTMLElement|null = null
-    private _toggleLabel:HTMLElement|null = null
     private _animation:Animation|null = null
     private _isClosing:boolean = false
     private _isExpanding:boolean = false
@@ -32,17 +30,18 @@ export class DetailsSummary extends WebComponent.create('details-summary') {
         this.classList.toggle('open', !!this._details?.open)
 
         if (this._summary) {
+            //
+            // The icon is the only thing we add to the summary, and it is
+            // hidden from the a11y tree. A summary's accessible name is
+            // computed from its contents, so anything visible to assistive
+            // tech here would be appended to the author's own label.
+            // Expanded/collapsed is already exposed as state by <summary>.
+            //
             const icon = document.createElement('span')
             icon.setAttribute('aria-hidden', 'true')
             icon.className = 'details-summary-icon'
 
-            const label = document.createElement('span')
-            label.className = 'visually-hidden'
-            label.textContent = this._details?.open ? 'collapse' : 'expand'
-            this._toggleLabel = label
-
             this._summary.appendChild(icon)
-            this._summary.appendChild(label)
 
             this._summary.addEventListener('click', (e) => this.onClick(e))
         }
@@ -89,10 +88,8 @@ export class DetailsSummary extends WebComponent.create('details-summary') {
         if (!this._details) return
 
         if (this._isClosing || !this._details.open) {
-            if (this._toggleLabel) this._toggleLabel.textContent = 'collapse'
             this._open()
         } else if (this._isExpanding || this._details.open) {
-            if (this._toggleLabel) this._toggleLabel.textContent = 'expand'
             this._shrink()
         }
     }

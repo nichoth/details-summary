@@ -316,6 +316,39 @@ test('host has the "open" class when it renders already open', async t => {
         'should have the open class when rendered open')
 })
 
+test('injected summary content stays out of the accessible name', async t => {
+    document.body.innerHTML += `
+        <details-summary class="test-a11y-name" duration="0">
+            <details>
+                <summary>A11y name</summary>
+                <div class="details-content">content</div>
+            </details>
+        </details-summary>
+    `
+
+    const el = (await waitFor('details-summary.test-a11y-name'))!
+    const summary = el.querySelector('summary') as HTMLElement
+
+    //
+    // A `<summary>`'s accessible name comes from its contents, so anything
+    // this component adds to it must be hidden from the a11y tree, or it
+    // becomes part of the name of the author's own label.
+    //
+    const exposed = () => [...summary.children]
+        .filter(child => child.getAttribute('aria-hidden') !== 'true')
+
+    t.equal(exposed().length, 0,
+        'everything added to the summary should be aria-hidden while closed')
+
+    await new Promise(resolve => {
+        el.addEventListener('open', resolve, { once: true })
+        summary.click()
+    })
+
+    t.equal(exposed().length, 0,
+        'everything added to the summary should be aria-hidden while open')
+})
+
 test('all done', () => {
     // @ts-expect-error tests
     window.testsFinished = true
